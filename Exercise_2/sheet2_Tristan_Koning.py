@@ -95,6 +95,40 @@ def correlation(x, y):
     return correlation
 
 
+def histogram(x, nrBins, plot_name, xLabel):
+    min_x = min(x)
+    max_x = max(x)
+
+    # Calculate bin centres and height
+    bin_heights = [0] * nrBins
+    bin_width = (max_x - min_x) / nrBins
+    bin_centres = np.arange(min_x + bin_width / 2, max_x, bin_width)
+
+
+    for value in x:
+        bin_index = (value - min_x) // bin_width  # Normalize to 0 as centre and divide by width of bins
+        if bin_index == nrBins:
+            bin_index -= 1
+        bin_heights[int(bin_index)] += 1
+
+    # Calculate errors of each bin
+    bin_errors = []
+    for height in bin_heights:
+        bin_errors.append(np.sqrt(height))
+
+    # Plot bars
+    plt.figure()
+    plt.bar(bin_centres, bin_heights, width=bin_width)
+    plt.errorbar(bin_centres, bin_heights, yerr=bin_errors, fmt="o", color="r")
+    plt.title(plot_name)
+    plt.ylabel("Frequency")
+    plt.xlabel(xLabel)
+    plt.savefig(plot_name + ".pdf")
+    plt.close()
+
+    return bin_heights, bin_centres
+
+
 def ex1():
     data = np.loadtxt("ironman.txt")
     age = 2010 - data[:, 1]
@@ -135,12 +169,42 @@ def ex1():
     print("\n")
 
     # c)
-    # TODO: Implement own algorithm for histogram using plt.bar and compute bins yourself
     # Histogram of Age
-    bin_uncertainties = bin_uncertainty(age, 20)
+    age_hist_heights, age_hist_bins = histogram(age, 20, "age_histogram_20_bins", "Age of Participant (years)")
+
+    # Total time histogram
+    total_time_hist_heights, total_time_hist_bins = histogram(total_time, 20, "total_time_histogram_20_bins", "Total Time (min)")
 
     # d)
-    # TODO
+    age_hist_mean = sum(age_hist_heights * age_hist_bins) / sum(age_hist_heights)
+    age_hist_variance = sum(age_hist_heights * (age_hist_bins - age_hist_mean) ** 2) / sum(age_hist_heights)
+    age_hist_std = np.sqrt(age_hist_variance)
+
+    print(f"The mean of the age histogram with 20 bins is {age_hist_mean:.2f}, The variance is {age_hist_variance:.2f}, The standard deviation is {age_hist_std:.2f}.")
+
+    # Test with 50 bins
+    age_hist_heights, age_hist_bins = histogram(age, 50, "age_histogram_50_bins", "Age of Participant (years)")
+    age_hist_mean = sum(age_hist_heights * age_hist_bins) / sum(age_hist_heights)
+    age_hist_variance = sum(age_hist_heights * (age_hist_bins - age_hist_mean) ** 2) / sum(age_hist_heights)
+    age_hist_std = np.sqrt(age_hist_variance)
+
+    print(f"The mean of the age histogram with 50 bins is {age_hist_mean:.2f}, The variance is {age_hist_variance:.2f}, The standard deviation is {age_hist_std:.2f}.")
+
+    # Test with 10 bins
+    age_hist_heights, age_hist_bins = histogram(age, 10, "age_histogram_10_bins", "Age of Participant (years)")
+    age_hist_mean = sum(age_hist_heights * age_hist_bins) / sum(age_hist_heights)
+    age_hist_variance = sum(age_hist_heights * (age_hist_bins - age_hist_mean) ** 2) / sum(age_hist_heights)
+    age_hist_std = np.sqrt(age_hist_variance)
+
+    print(f"The mean of the age histogram with 10 bins is {age_hist_mean:.2f}, The variance is {age_hist_variance:.2f}, The standard deviation is {age_hist_std:.2f}.")
+    print("\n")
+
+    # Total Time
+    total_time_hist_mean = sum(total_time_hist_heights * total_time_hist_bins) / sum(total_time_hist_heights)
+    total_time_hist_variance = sum(total_time_hist_heights * (total_time_hist_bins - total_time_hist_mean) ** 2) / sum(total_time_hist_heights)
+    total_time_hist_std = np.sqrt(total_time_hist_variance)
+
+    print(f"The mean of the total time histogram with 20 bins is {total_time_hist_mean:.2f}, The variance is {total_time_hist_variance:.2f}, The standard deviation is {total_time_hist_std:.2f}.")
 
     # e)
     # Setup data
@@ -188,13 +252,29 @@ def ex1():
     print(f"The correlation between age and total time (in minutes) is {corr_age_total_time_minutes:.2f}.")
     print("\n")
 
-    # e)
-
 
 def ex2():
     radiation = np.loadtxt("radiation.txt")
+    # Measurements in mSv/h
+    measurements = radiation[:, 0]
+    std = radiation[:, 1]
+
+    # a)
+    # Convert measurement to mSv/year
+    measurements_year = measurements * 24 * 365
+
+    # Average with uncertainties
+    average_radiation = sum((1 / std**2) * measurements_year) / sum(1 / std**2)
+    uncertainty_average_radiation = 1 / np.sqrt(sum(1 / std**2))
+
+    print(f"The average radiation is {average_radiation:.6f} +/- {uncertainty_average_radiation:.6f} mSv/year.")
+
+    # b)
+    print(f"Confidence Interval of average radiation is [{(average_radiation - uncertainty_average_radiation):.6f}, {(average_radiation + uncertainty_average_radiation):.6f}].")
+
+    # Refer to the pdf for analysis
 
 
 if __name__ == '__main__':
     ex1()
-    #ex2()
+    ex2()

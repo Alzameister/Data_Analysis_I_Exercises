@@ -2,13 +2,18 @@
 
 ## Exercise 1
 
-### a)
+### b)
 
 The mean of the participants younger than 35 is 689.22 +/- 3.64 minutes.
 The mean of the participants older than 35 is 704.43 +/- 2.44 minutes
 
 Looking at the uncertainty, we can conclude that the group of participants younger than 35 is the faster group ,
 as there is not overlap between the two uncertainties.
+
+### d)
+
+All the values are close to the results from (a), but have small variations since we have lost some detail in the values by matching them to the bins.
+The means don't really change with different bin widths, while the variance and the standard deviation decrease with more bins.
 
 ### e)
 
@@ -23,4 +28,7 @@ The cov / correlation of cycling time and running time is highly positive, which
 The covariance of total time in minutes and age is a lot lower than if the total time is measured in time, whereas correlation stays the same. This is due to the fact that covariance is highly susceptible to different scaling effects, and correlation takes that into account by dividing by the multiplication of the standard deviations.
 
 ## Exercise 2
+
+### b)
+The natural background radiation is 2.4 mSv/y. From the result of the code, the average radiation in that room is between 2.590590 and 2.590605 mSv/y. This is definitively higher than the natural background radiation.
 
