@@ -113,59 +113,6 @@ def plot_detected_particles(nr_particles: int, nr_detectors: int, probability: f
     plt.close()
 
 
-def ex1():
-    print("Exercise 1\n")
-    # (a)
-    probability = 0.85
-    trials = 4
-    plot_name = "binomial_n4_p85"
-    plot_binomial(probability, trials, plot_name)
-    print(f"1a) Result can be found in {plot_name}.png\n")
-
-    # (b)
-    required_hits = 3
-    target_efficiency = 0.99
-    num_detectors = get_min_detectors(probability, required_hits, target_efficiency)
-    print(f"1b) The minimum number of detectors required is {num_detectors}\n")
-
-    # (c)
-    nr_particles = 1000
-    nr_detectors = 4
-    required_hits = 3
-    plot_name = "detected_particles"
-    plot_detected_particles(nr_particles, nr_detectors, probability, required_hits, plot_name)
-    print(f"1c) The standard deviation of the binomial distribution is {sqrt(nr_particles * probability * (1 - probability))}")
-    print(f"The standard deviation of the poisson distribution is {sqrt(nr_particles * probability)}")
-    print("The standard deviations do not match closely, therefore the width of the distribution is not what one would "
-          "expect from the poisson distribution\n")
-    print("Exercise 1 done\n")
-
-
-def ex3():
-    print("Exercise 3\n")
-    # Setup
-    mu = 1
-    std = 0.01
-    norm_distribution = scipy.stats.norm(loc=mu, scale=std)
-
-    interval = [0.97, 1.03]
-    prob_a = integrate(norm_distribution, interval[0], interval[1])
-    print(f"3a) {prob_a:.3f}% probability to be within {interval}\n")
-
-    interval = [0.99, 1.00]
-    prob_b = integrate(norm_distribution, interval[0], interval[1])
-    print(f"3b) {prob_b:.3f}% probability to be within {interval}\n")
-
-    interval = [0.95, 1.05]
-    prob_c = integrate(norm_distribution, interval[0], interval[1])
-    print(f"3c) {prob_c:.3f}% probability to be within {interval}\n")
-
-    interval = [0, 1.015]
-    prob_d = integrate(norm_distribution, interval[0], interval[1])
-    print(f"3d) {prob_d:.3f}% probability to have a height less than {interval[1]}\n")
-    print("Exercise 3 done\n")
-
-
 def detected_ZBosons(prob, N, min_detected):
     binom_distribution = scipy.stats.binom(n=N, p=prob)
     prob_a = 1 - binom_distribution.cdf(min_detected - 1)
@@ -268,6 +215,59 @@ def plot_binom_poisson_decayed(prob, N, min_decayed, plot_name):
     plt.legend()
     plt.savefig(f"{plot_name}.png")
     plt.close()
+
+
+def ex1():
+    print("Exercise 1\n")
+    # (a)
+    probability = 0.85
+    trials = 4
+    plot_name = "binomial_n4_p85"
+    plot_binomial(probability, trials, plot_name)
+    print(f"1a) Result can be found in {plot_name}.png\n")
+
+    # (b)
+    required_hits = 3
+    target_efficiency = 0.99
+    num_detectors = get_min_detectors(probability, required_hits, target_efficiency)
+    print(f"1b) The minimum number of detectors required is {num_detectors}\n")
+
+    # (c)
+    nr_particles = 1000
+    nr_detectors = 4
+    required_hits = 3
+    plot_name = "detected_particles"
+    plot_detected_particles(nr_particles, nr_detectors, probability, required_hits, plot_name)
+    print(f"1c) The standard deviation of the binomial distribution is {sqrt(nr_particles * probability * (1 - probability))}")
+    print(f"The standard deviation of the poisson distribution is {sqrt(nr_particles * probability)}")
+    print("The standard deviations do not match closely, therefore the width of the distribution is not what one would "
+          "expect from the poisson distribution\n")
+    print("Exercise 1 done\n")
+
+
+def ex3():
+    print("Exercise 3\n")
+    # Setup
+    mu = 1
+    std = 0.01
+    norm_distribution = scipy.stats.norm(loc=mu, scale=std)
+
+    interval = [0.97, 1.03]
+    prob_a = integrate(norm_distribution, interval[0], interval[1])
+    print(f"3a) {prob_a:.3f}% probability to be within {interval}\n")
+
+    interval = [0.99, 1.00]
+    prob_b = integrate(norm_distribution, interval[0], interval[1])
+    print(f"3b) {prob_b:.3f}% probability to be within {interval}\n")
+
+    interval = [0.95, 1.05]
+    prob_c = integrate(norm_distribution, interval[0], interval[1])
+    print(f"3c) {prob_c:.3f}% probability to be within {interval}\n")
+
+    interval = [0, 1.015]
+    prob_d = integrate(norm_distribution, interval[0], interval[1])
+    print(f"3d) {prob_d:.3f}% probability to have a height less than {interval[1]}\n")
+    print("Exercise 3 done\n")
 
 
 def ex4():
